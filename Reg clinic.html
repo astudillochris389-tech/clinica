@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Clínico Rápido</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f8ff;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: #34495e;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 15px 20px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            background-color: #2c3e50;
+            border-bottom: 3px solid #e74c3c;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #3498db;
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .xabcde-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .xabcde-item {
+            padding: 15px;
+            background-color: #e8f4fc;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .xabcde-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        
+        .xabcde-title i {
+            margin-right: 8px;
+            color: #e74c3c;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-success {
+            background-color: #2ecc71;
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-export {
+            background-color: #9b59b6;
+        }
+        
+        .btn-export:hover {
+            background-color: #8e44ad;
+        }
+        
+        .records-section {
+            margin-top: 30px;
+        }
+        
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .records-table th, .records-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .records-table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .records-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .records-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .view-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .edit-btn {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .xabcde-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        .timestamp {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .glasgow-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .glasgow-item {
+            padding: 10px;
+            background-color: #e8f4fc;
+            border-radius: 5px;
+        }
+        
+        .glasgow-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .export-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Registro Clínico Rápido</h1>
+            <p class="description">Sistema de registro para evaluación inicial de pacientes</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="new-record">Nuevo Registro</div>
+            <div class="tab" data-tab="view-records">Ver Registros</div>
+        </div>
+        
+        <!-- Pestaña de Nuevo Registro -->
+        <div class="tab-content active" id="new-record-content">
+            <form id="clinical-record-form">
+                <div class="section">
+                    <h2 class="section-title"><i>👤</i> Datos Básicos del Paciente</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="patient-id">ID Paciente:</label>
+                            <input type="text" id="patient-id" placeholder="Número de identificación" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-age">Edad:</label>
+                            <input type="number" id="patient-age" min="0" max="120" placeholder="Años" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-sex">Sexo:</label>
+                            <select id="patient-sex" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Femenino">Femenino</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="emergency-type">Tipo de Emergencia:</label>
+                            <select id="emergency-type" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Clinica">Clínica</option>
+                                <option value="Trauma">Trauma</option>
+                                <option value="Ginecologico">Ginecológico</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i>📊</i> Signos Vitales y Escalas</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="blood-pressure">Tensión Arterial:</label>
+                            <input type="text" id="blood-pressure" placeholder="Ej: 120/80 mmHg">
+                        </div>
+                        <div class="form-group">
+                            <label for="heart-rate">Frecuencia Cardíaca:</label>
+                            <input type="number" id="heart-rate" placeholder="lpm">
+                        </div>
+                        <div class="form-group">
+                            <label for="respiratory-rate">Frecuencia Respiratoria:</label>
+                            <input type="number" id="respiratory-rate" placeholder="rpm">
+                        </div>
+                        <div class="form-group">
+                            <label for="temperature">Temperatura:</label>
+                            <input type="number" id="temperature" step="0.1" placeholder="°C">
+                        </div>
+                        <div class="form-group">
+                            <label for="oxygen-saturation">Saturación de Oxígeno:</label>
+                            <input type="number" id="oxygen-saturation" placeholder="%">
+                        </div>
+                        <div class="form-group">
+                            <label for="glucose">Glucosa:</label>
+                            <input type="number" id="glucose" placeholder="mg/dL">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Escala de Coma de Glasgow:</label>
+                        <div class="glasgow-container">
+                            <div class="glasgow-item">
+                                <div class="glasgow-title">Apertura Ocular (E)</div>
+                                <select id="glasgow-eye">
+                                    <option value="4">4 - Espontánea</option>
+                                    <option value="3">3 - A la orden verbal</option>
+                                    <option value="2">2 - Al estímulo doloroso</option>
+                                    <option value="1">1 - Ninguna</option>
+                                </select>
+                            </div>
+                            <div class="glasgow-item">
+                                <div class="glasgow-title">Respuesta Verbal (V)</div>
+                                <select id="glasgow-verbal">
+                                    <option value="5">5 - Orientado</option>
+                                    <option value="4">4 - Conversación confusa</option>
+                                    <option value="3">3 - Palabras inapropiadas</option>
+                                    <option value="2">2 - Sonidos incomprensibles</option>
+                                    <option value="1">1 - Ninguna</option>
+                                </select>
+                            </div>
+                            <div class="glasgow-item">
+                                <div class="glasgow-title">Respuesta Motora (M)</div>
+                                <select id="glasgow-motor">
+                                    <option value="6">6 - Obedece órdenes</option>
+                                    <option value="5">5 - Localiza estímulo</option>
+                                    <option value="4">4 - Retira ante el dolor</option>
+                                    <option value="3">3 - Flexión anormal</option>
+                                    <option value="2">2 - Extensión anormal</option>
+                                    <option value="1">1 - Ninguna</option>
+                                </select>
+                            </div>
+                            <div class="glasgow-item">
+                                <div class="glasgow-title">Total Glasgow</div>
+                                <input type="number" id="glasgow-total" min="3" max="15" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="avdi">AVDI (Escala de Dolor):</label>
+                        <select id="avdi">
+                            <option value="">Seleccione...</option>
+                            <option value="0">0 - Sin dolor</option>
+                            <option value="1">1 - Dolor leve</option>
+                            <option value="2">2 - Dolor moderado</option>
+                            <option value="3">3 - Dolor intenso</option>
+                            <option value="4">4 - Dolor muy intenso</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i>📝</i> Motivo de Consulta</h2>
+                    <div class="form-group">
+                        <label for="chief-complaint">Problema por el que acude:</label>
+                        <textarea id="chief-complaint" placeholder="Describa el motivo principal de consulta"></textarea>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i>🚨</i> Evaluación XABCDE</h2>
+                    <div class="xabcde-grid">
+                        <div class="xabcde-item">
+                            <div class="xabcde-title"><i>X</i> Hemorragias Externas</div>
+                            <textarea id="x-hemorrhage" placeholder="Describa hemorragias externas presentes"></textarea>
+                        </div>
+                        <div class="xabcde-item">
+                            <div class="xabcde-title"><i>A</i> Vía Aérea</div>
+                            <textarea id="a-airway" placeholder="Evaluación de vía aérea"></textarea>
+                        </div>
+                        <div class="xabcde-item">
+                            <div class="xabcde-title"><i>B</i> Respiración</div>
+                            <textarea id="b-breathing" placeholder="Evaluación respiratoria"></textarea>
+                        </div>
+                        <div class="xabcde-item">
+                            <div class="xabcde-title"><i>C</i> Circulación</div>
+                            <textarea id="c-circulation" placeholder="Evaluación circulatoria"></textarea>
+                        </div>
+                        <div class="xabcde-item">
+                            <div class="xabcde-title"><i>D</i> Déficit Neurológico</div>
+                            <textarea id="d-neurological" placeholder="Evaluación neurológica"></textarea>
+                        </div>
+                        <div class="xabcde-item">
+                            <div class="xabcde-title"><i>E</i> Exposición/Ambiental</div>
+                            <textarea id="e-exposure" placeholder="Exposición y evaluación ambiental"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i>🔍</i> Signos y Síntomas</h2>
+                    <div class="form-group">
+                        <textarea id="symptoms" placeholder="Describa los signos y síntomas presentes"></textarea>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i>🏥</i> Diagnósticos</h2>
+                    <div class="form-group">
+                        <label for="presumptive-diagnosis">Diagnóstico Presuntivo:</label>
+                        <textarea id="presumptive-diagnosis" placeholder="Diagnóstico principal presuntivo"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="differential-diagnosis">Diagnósticos Diferenciales:</label>
+                        <textarea id="differential-diagnosis" placeholder="Lista de diagnósticos diferenciales"></textarea>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i>💊</i> Tratamiento Aplicado</h2>
+                    <div class="form-group">
+                        <textarea id="treatment" placeholder="Describa el tratamiento aplicado"></textarea>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i>📋</i> Otras Escalas Aplicadas</h2>
+                    <div class="form-grid">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="scale-qsofa" value="qSOFA">
+                            <label for="scale-qsofa">qSOFA</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="scale-nihss" value="NIHSS">
+                            <label for="scale-nihss">NIHSS</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="scale-apache" value="APACHE II">
+                            <label for="scale-apache">APACHE II</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="scale-mama" value="Score MAMÁ">
+                            <label for="scale-mama">Score MAMÁ</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="scale-other" value="Otra">
+                            <label for="scale-other">Otra escala</label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="other-scale-container" style="display: none; margin-top: 15px;">
+                        <label for="other-scale">Especifique otra escala:</label>
+                        <input type="text" id="other-scale" placeholder="Nombre de la escala">
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i>👨‍⚕️</i> Datos del Profesional</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="professional-name">Nombre del Profesional:</label>
+                            <input type="text" id="professional-name" placeholder="Nombre completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="professional-id">Identificación Profesional:</label>
+                            <input type="text" id="professional-id" placeholder="Número de colegiado/licencia">
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button type="button" class="btn btn-primary" id="save-record">Guardar Registro</button>
+                    <button type="button" class="btn btn-danger" id="reset-form">Limpiar Formulario</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Pestaña de Ver Registros -->
+        <div class="tab-content" id="view-records-content">
+            <div class="section">
+                <h2 class="section-title"><i>📂</i> Registros Clínicos Guardados</h2>
+                
+                <div class="export-options">
+                    <button class="btn btn-export" id="export-txt">Exportar a TXT</button>
+                    <button class="btn btn-export" id="export-csv">Exportar a Excel (CSV)</button>
+                    <button class="btn btn-export" id="export-json">Exportar a JSON</button>
+                </div>
+                
+                <div class="records-section">
+                    <table class="records-table" id="records-table">
+                        <thead>
+                            <tr>
+                                <th>ID Paciente</th>
+                                <th>Edad</th>
+                                <th>Sexo</th>
+                                <th>Tipo Emergencia</th>
+                                <th>Motivo Consulta</th>
+                                <th>Glasgow</th>
+                                <th>AVDI</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="records-body">
+                            <!-- Los registros se cargarán aquí dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para ver detalles del registro -->
+    <div class="modal" id="record-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Detalles del Registro Clínico</h2>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <div id="modal-body">
+                <!-- Los detalles del registro se cargarán aquí -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funcionalidad de pestañas
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+                
+                if (tabId === 'view-records') {
+                    loadRecords();
+                }
+            });
+        });
+        
+        // Calcular Glasgow automáticamente
+        function calculateGlasgow() {
+            const eye = parseInt(document.getElementById('glasgow-eye').value) || 0;
+            const verbal = parseInt(document.getElementById('glasgow-verbal').value) || 0;
+            const motor = parseInt(document.getElementById('glasgow-motor').value) || 0;
+            const total = eye + verbal + motor;
+            document.getElementById('glasgow-total').value = total;
+        }
+        
+        document.getElementById('glasgow-eye').addEventListener('change', calculateGlasgow);
+        document.getElementById('glasgow-verbal').addEventListener('change', calculateGlasgow);
+        document.getElementById('glasgow-motor').addEventListener('change', calculateGlasgow);
+        
+        // Mostrar/ocultar campo "otra escala"
+        document.getElementById('scale-other').addEventListener('change', function() {
+            document.getElementById('other-scale-container').style.display = this.checked ? 'block' : 'none';
+        });
+        
+        // Guardar registro
+        document.getElementById('save-record').addEventListener('click', function() {
+            if (!validateForm()) {
+                alert('Por favor complete los campos obligatorios: ID Paciente, Edad, Sexo, Tipo de Emergencia y Nombre del Profesional');
+                return;
+            }
+            
+            const record = {
+                id: document.getElementById('patient-id').value,
+                age: document.getElementById('patient-age').value,
+                sex: document.getElementById('patient-sex').value,
+                emergencyType: document.getElementById('emergency-type').value,
+                bloodPressure: document.getElementById('blood-pressure').value,
+                heartRate: document.getElementById('heart-rate').value,
+                respiratoryRate: document.getElementById('respiratory-rate').value,
+                temperature: document.getElementById('temperature').value,
+                oxygenSaturation: document.getElementById('oxygen-saturation').value,
+                glucose: document.getElementById('glucose').value,
+                glasgow: {
+                    eye: document.getElementById('glasgow-eye').value,
+                    verbal: document.getElementById('glasgow-verbal').value,
+                    motor: document.getElementById('glasgow-motor').value,
+                    total: document.getElementById('glasgow-total').value
+                },
+                avdi: document.getElementById('avdi').value,
+                chiefComplaint: document.getElementById('chief-complaint').value,
+                xHemorrhage: document.getElementById('x-hemorrhage').value,
+                aAirway: document.getElementById('a-airway').value,
+                bBreathing: document.getElementById('b-breathing').value,
+                cCirculation: document.getElementById('c-circulation').value,
+                dNeurological: document.getElementById('d-neurological').value,
+                eExposure: document.getElementById('e-exposure').value,
+                symptoms: document.getElementById('symptoms').value,
+                presumptiveDiagnosis: document.getElementById('presumptive-diagnosis').value,
+                differentialDiagnosis: document.getElementById('differential-diagnosis').value,
+                treatment: document.getElementById('treatment').value,
+                scales: getSelectedScales(),
+                professionalName: document.getElementById('professional-name').value,
+                professionalId: document.getElementById('professional-id').value,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            saveRecord(record);
+            alert('Registro guardado exitosamente');
+            document.getElementById('clinical-record-form').reset();
+            document.getElementById('other-scale-container').style.display = 'none';
+            calculateGlasgow(); // Resetear Glasgow
+        });
+        
+        // Limpiar formulario
+        document.getElementById('reset-form').addEventListener('click', function() {
+            if (confirm('¿Está seguro de que desea limpiar el formulario? Se perderán todos los datos no guardados.')) {
+                document.getElementById('clinical-record-form').reset();
+                document.getElementById('other-scale-container').style.display = 'none';
+                calculateGlasgow(); // Resetear Glasgow
+            }
+        });
+        
+        // Obtener escalas seleccionadas
+        function getSelectedScales() {
+            const scales = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                if (checkbox.id === 'scale-other' && document.getElementById('other-scale').value) {
+                    scales.push(document.getElementById('other-scale').value);
+                } else if (checkbox.id !== 'scale-other') {
+                    scales.push(checkbox.value);
+                }
+            });
+            return scales;
+        }
+        
+        // Validar formulario
+        function validateForm() {
+            const requiredFields = [
+                'patient-id', 'patient-age', 'patient-sex', 'emergency-type', 'professional-name'
+            ];
+            
+            for (const fieldId of requiredFields) {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        // Guardar registro en localStorage
+        function saveRecord(record) {
+            let records = JSON.parse(localStorage.getItem('clinicalRecords')) || [];
+            records.push(record);
+            localStorage.setItem('clinicalRecords', JSON.stringify(records));
+        }
+        
+        // Cargar registros desde localStorage
+        function loadRecords() {
+            const records = JSON.parse(localStorage.getItem('clinicalRecords')) || [];
+            const recordsBody = document.getElementById('records-body');
+            recordsBody.innerHTML = '';
+            
+            if (records.length === 0) {
+                recordsBody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No hay registros guardados</td></tr>';
+                return;
+            }
+            
+            records.forEach((record, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.id}</td>
+                    <td>${record.age} años</td>
+                    <td>${record.sex}</td>
+                    <td>${record.emergencyType}</td>
+                    <td>${record.chiefComplaint ? (record.chiefComplaint.substring(0, 30) + (record.chiefComplaint.length > 30 ? '...' : '')) : 'No registrado'}</td>
+                    <td>${record.glasgow.total || 'No registrado'}</td>
+                    <td>${record.avdi || 'No registrado'}</td>
+                    <td>${record.timestamp}</td>
+                    <td class="action-buttons">
+                        <button class="action-btn view-btn" data-index="${index}">Ver</button>
+                        <button class="action-btn delete-btn" data-index="${index}">Eliminar</button>
+                    </td>
+                `;
+                recordsBody.appendChild(row);
+            });
+            
+            // Agregar event listeners a los botones
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = this.getAttribute('data-index');
+                    viewRecord(index);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = this.getAttribute('data-index');
+                    deleteRecord(index);
+                });
+            });
+        }
+        
+        // Ver registro completo
+        function viewRecord(index) {
+            const records = JSON.parse(localStorage.getItem('clinicalRecords')) || [];
+            const record = records[index];
+            
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <div class="section">
+                    <h3 class="section-title">Datos del Paciente</h3>
+                    <p><strong>ID Paciente:</strong> ${record.id}</p>
+                    <p><strong>Edad:</strong> ${record.age} años</p>
+                    <p><strong>Sexo:</strong> ${record.sex}</p>
+                    <p><strong>Tipo de Emergencia:</strong> ${record.emergencyType}</p>
+                    <div class="timestamp"><strong>Fecha de registro:</strong> ${record.timestamp}</div>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">Signos Vitales</h3>
+                    <div class="form-grid">
+                        <p><strong>Tensión Arterial:</strong> ${record.bloodPressure || 'No registrado'}</p>
+                        <p><strong>Frecuencia Cardíaca:</strong> ${record.heartRate || 'No registrado'} lpm</p>
+                        <p><strong>Frecuencia Respiratoria:</strong> ${record.respiratoryRate || 'No registrado'} rpm</p>
+                        <p><strong>Temperatura:</strong> ${record.temperature || 'No registrado'} °C</p>
+                        <p><strong>Saturación de Oxígeno:</strong> ${record.oxygenSaturation || 'No registrado'} %</p>
+                        <p><strong>Glucosa:</strong> ${record.glucose || 'No registrado'} mg/dL</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">Escalas de Evaluación</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <h4>Escala de Coma de Glasgow</h4>
+                            <p><strong>Apertura Ocular:</strong> ${record.glasgow.eye || 'No registrado'}</p>
+                            <p><strong>Respuesta Verbal:</strong> ${record.glasgow.verbal || 'No registrado'}</p>
+                            <p><strong>Respuesta Motora:</strong> ${record.glasgow.motor || 'No registrado'}</p>
+                            <p><strong>Total:</strong> ${record.glasgow.total || 'No registrado'}</p>
+                        </div>
+                        <div class="form-group">
+                            <h4>AVDI (Escala de Dolor)</h4>
+                            <p>${record.avdi || 'No registrado'}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <h4>Otras Escalas Aplicadas</h4>
+                        <p>${record.scales.length > 0 ? record.scales.join(', ') : 'No se aplicaron otras escalas'}</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">Motivo de Consulta</h3>
+                    <p>${record.chiefComplaint || 'No registrado'}</p>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">Evaluación XABCDE</h3>
+                    <div class="xabcde-grid">
+                        <div class="xabcde-item">
+                            <div class="xabcde-title">X - Hemorragias Externas</div>
+                            <p>${record.xHemorrhage || 'No registrado'}</p>
+                        </div>
+                        <div class="xabcde-item">
+                            <div class="xabcde-title">A - Vía Aérea</div>
+                            <p>${record.aAirway || 'No registrado'}</p>
+                        </div>
+                        <div class="xabcde-item">
+                            <div class="xabcde-title">B - Respiración</div>
+                            <p>${record.bBreathing || 'No registrado'}</p>
+                        </div>
+                        <div class="xabcde-item">
+                            <div class="xabcde-title">C - Circulación</div>
+                            <p>${record.cCirculation || 'No registrado'}</p>
+                        </div>
+                        <div class="xabcde-item">
+                            <div class="xabcde-title">D - Déficit Neurológico</div>
+                            <p>${record.dNeurological || 'No registrado'}</p>
+                        </div>
+                        <div class="xabcde-item">
+                            <div class="xabcde-title">E - Exposición/Ambiental</div>
+                            <p>${record.eExposure || 'No registrado'}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">Signos y Síntomas</h3>
+                    <p>${record.symptoms || 'No registrado'}</p>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">Diagnósticos</h3>
+                    <p><strong>Diagnóstico Presuntivo:</strong> ${record.presumptiveDiagnosis || 'No registrado'}</p>
+                    <p><strong>Diagnósticos Diferenciales:</strong> ${record.differentialDiagnosis || 'No registrado'}</p>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">Tratamiento Aplicado</h3>
+                    <p>${record.treatment || 'No registrado'}</p>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">Profesional Responsable</h3>
+                    <p><strong>Nombre:</strong> ${record.professionalName}</p>
+                    <p><strong>Identificación Profesional:</strong> ${record.professionalId || 'No registrado'}</p>
+                </div>
+            `;
+            
+            document.getElementById('record-modal').style.display = 'flex';
+        }
+        
+        // Eliminar registro
+        function deleteRecord(index) {
+            if (confirm('¿Está seguro de que desea eliminar este registro? Esta acción no se puede deshacer.')) {
+                let records = JSON.parse(localStorage.getItem('clinicalRecords')) || [];
+                records.splice(index, 1);
+                localStorage.setItem('clinicalRecords', JSON.stringify(records));
+                loadRecords();
+            }
+        }
+        
+        // Cerrar modal
+        document.getElementById('close-modal').addEventListener('click', function() {
+            document.getElementById('record-modal').style.display = 'none';
+        });
+        
+        // Cerrar modal al hacer clic fuera
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('record-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // ================== FUNCIONES DE EXPORTACIÓN ==================
+        
+        // Exportar a TXT
+        document.getElementById('export-txt').addEventListener('click', function() {
+            const records = JSON.parse(localStorage.getItem('clinicalRecords')) || [];
+            if (records.length === 0) {
+                alert('No hay registros para exportar.');
+                return;
+            }
+            
+            let txtContent = 'REGISTROS CLÍNICOS - EXPORTACIÓN\n';
+            txtContent += '===================================\n\n';
+            
+            records.forEach((record, index) => {
+                txtContent += `REGISTRO ${index + 1}\n`;
+                txtContent += `ID Paciente: ${record.id}\n`;
+                txtContent += `Edad: ${record.age} años\n`;
+                txtContent += `Sexo: ${record.sex}\n`;
+                txtContent += `Tipo de Emergencia: ${record.emergencyType}\n`;
+                txtContent += `Fecha: ${record.timestamp}\n\n`;
+                
+                txtContent += `SIGNOS VITALES:\n`;
+                txtContent += `  Tensión Arterial: ${record.bloodPressure || 'No registrado'}\n`;
+                txtContent += `  Frecuencia Cardíaca: ${record.heartRate || 'No registrado'} lpm\n`;
+                txtContent += `  Frecuencia Respiratoria: ${record.respiratoryRate || 'No registrado'} rpm\n`;
+                txtContent += `  Temperatura: ${record.temperature || 'No registrado'} °C\n`;
+                txtContent += `  Saturación de Oxígeno: ${record.oxygenSaturation || 'No registrado'} %\n`;
+                txtContent += `  Glucosa: ${record.glucose || 'No registrado'} mg/dL\n\n`;
+                
+                txtContent += `ESCALAS:\n`;
+                txtContent += `  Glasgow: Ocular ${record.glasgow.eye}, Verbal ${record.glasgow.verbal}, Motor ${record.glasgow.motor}, Total ${record.glasgow.total}\n`;
+                txtContent += `  AVDI: ${record.avdi || 'No registrado'}\n`;
+                txtContent += `  Otras Escalas: ${record.scales.join(', ') || 'Ninguna'}\n\n`;
+                
+                txtContent += `MOTIVO DE CONSULTA:\n`;
+                txtContent += `  ${record.chiefComplaint || 'No registrado'}\n\n`;
+                
+                txtContent += `SIGNOS Y SÍNTOMAS:\n`;
+                txtContent += `  ${record.symptoms || 'No registrado'}\n\n`;
+                
+                txtContent += `DIAGNÓSTICOS:\n`;
+                txtContent += `  Presuntivo: ${record.presumptiveDiagnosis || 'No registrado'}\n`;
+                txtContent += `  Diferenciales: ${record.differentialDiagnosis || 'No registrado'}\n\n`;
+                
+                txtContent += `TRATAMIENTO:\n`;
+                txtContent += `  ${record.treatment || 'No registrado'}\n\n`;
+                
+                txtContent += `PROFESIONAL:\n`;
+                txtContent += `  Nombre: ${record.professionalName}\n`;
+                txtContent += `  ID: ${record.professionalId || 'No registrado'}\n\n`;
+                
+                txtContent += '----------------------------------------\n\n';
+            });
+            
+            downloadFile(txtContent, 'registros_clinicos.txt', 'text/plain');
+        });
+        
+        // Exportar a CSV (Excel)
+        document.getElementById('export-csv').addEventListener('click', function() {
+            const records = JSON.parse(localStorage.getItem('clinicalRecords')) || [];
+            if (records.length === 0) {
+                alert('No hay registros para exportar.');
+                return;
+            }
+            
+            // Encabezados CSV
+            let csvContent = 'ID Paciente,Edad,Sexo,Tipo Emergencia,Tensión Arterial,FC,FR,Temperatura,SpO2,Glucosa,Glasgow Ocular,Glasgow Verbal,Glasgow Motor,Glasgow Total,AVDI,Motivo Consulta,Diagnóstico Presuntivo,Tratamiento,Escalas,Profesional,ID Profesional,Fecha\n';
+            
+            records.forEach(record => {
+                const row = [
+                    `"${record.id}"`,
+                    record.age,
+                    `"${record.sex}"`,
+                    `"${record.emergencyType}"`,
+                    `"${record.bloodPressure || 'N/R'}"`,
+                    record.heartRate || 'N/R',
+                    record.respiratoryRate || 'N/R',
+                    record.temperature || 'N/R',
+                    record.oxygenSaturation || 'N/R',
+                    record.glucose || 'N/R',
+                    record.glasgow.eye,
+                    record.glasgow.verbal,
+                    record.glasgow.motor,
+                    record.glasgow.total,
+                    record.avdi || 'N/R',
+                    `"${(record.chiefComplaint || 'N/R').replace(/"/g, '""')}"`,
+                    `"${(record.presumptiveDiagnosis || 'N/R').replace(/"/g, '""')}"`,
+                    `"${(record.treatment || 'N/R').replace(/"/g, '""')}"`,
+                    `"${record.scales.join(', ').replace(/"/g, '""')}"`,
+                    `"${record.professionalName.replace(/"/g, '""')}"`,
+                    `"${record.professionalId || 'N/R'}"`,
+                    `"${record.timestamp}"`
+                ].join(',');
+                
+                csvContent += row + '\n';
+            });
+            
+            downloadFile(csvContent, 'registros_clinicos.csv', 'text/csv');
+        });
+        
+        // Exportar a JSON
+        document.getElementById('export-json').addEventListener('click', function() {
+            const records = JSON.parse(localStorage.getItem('clinicalRecords')) || [];
+            if (records.length === 0) {
+                alert('No hay registros para exportar.');
+                return;
+            }
+            
+            const jsonContent = JSON.stringify(records, null, 2);
+            downloadFile(jsonContent, 'registros_clinicos.json', 'application/json');
+        });
+        
+        // Función auxiliar para descargar archivos
+        function downloadFile(content, fileName, contentType) {
+            const blob = new Blob([content], { type: contentType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateGlasgow();
+            loadRecords();
+        });
+    </script>
+</body>
+</html>
